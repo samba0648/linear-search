@@ -1,49 +1,47 @@
-import { Container, Row, Col, Form } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import "./App.css";
 import Element from "./Element";
 
-const App = () => {
-  const [array, setArray] = useState(null);
-  const [target, setTarget] = useState(); //Element to be search
-  const [search, setSearch] = useState(false); // Whether search started or not
-  const [isFound, setIsFound] = useState({found:false,foundAt:-1});
+const searchStates = {
+  NOT_STARTED: "NOT_STARTED",
+  IN_PROGRESS: "IN_PROGRESS",
+  FINISHED: "FINISHED",
+};
 
-  //Updating array from user input
-  const arrayUpdate = async (event) => {
-    let inputArr = event.target.value.trim();
-    inputArr = inputArr.split(" ");
-    inputArr = await inputArr.reduce((dupArr, element, index) => {
-      dupArr.push({ value: element, index, isMatch: null });
-      return dupArr;
-    }, []);
+const App = () => {
+  const [array, setArray] = useState([]);
+  const [target, setTarget] = useState("");
+  const [search, setSearch] = useState(searchStates.NOT_STARTED);
+  const [isFound, setIsFound] = useState({ found: false, foundAt: -1 });
+
+  const arrayUpdate = (event) => {
+    const inputArr = event.target.value
+      .trim()
+      .split(" ")
+      .map((value, index) => ({
+        value,
+        index,
+        isMatch: null,
+      }));
     setArray(inputArr);
   };
 
-  //updating target value
   const updateElement = (event) => {
     const temp = event.target.value;
-    if(temp!=="" && temp  !==" "){
-      setTarget(event.target.value);
-    }
-    else{
-      setSearch(false);
-      setIsFound({found:false,foundAt:-1});
-      setTarget(null);
-    }
-    
+    setTarget(temp.trim());
+    setSearch(searchStates.NOT_STARTED);
+    setIsFound({ found: false, foundAt: -1 });
   };
-  //starting search
+
   const startSearch = () => {
-    if (![null, undefined, " "].includes(target)) {
-      setSearch(true);
+    if (target !== "" && search === searchStates.NOT_STARTED) {
+      setSearch(searchStates.IN_PROGRESS);
     }
   };
-  useEffect(()=>{
-    console.log(`search ${search}`);
-  })
+
   return (
     <div className="App">
       <Container>
@@ -63,7 +61,7 @@ const App = () => {
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
-                placeholder="Enter value to be search"
+                placeholder="Enter value to be searched"
                 onChange={updateElement}
               />
             </Form.Group>
@@ -71,28 +69,38 @@ const App = () => {
         </Row>
         <Row className="d-flex justify-content-center">
           <Col md={3}>
-            <button className="btn btn-success" onClick={startSearch}>
+            <Button className="btn btn-success" onClick={startSearch}>
               Search
-            </button>
+            </Button>
           </Col>
         </Row>
         <Row className="d-flex justify-content-center">
-          {array &&
-            array.map((element, index) => (
-              <Col md={1} key={index}>
-                <Element
-                  {...{
-                    element,
-                    target,
-                    search,
-                    isFound,
-                    setIsFound,
-                    index,
-                    setSearch 
-                  }}
-                />
-              </Col>
-            ))}
+          {search === searchStates.FINISHED && (
+            <div className="mt-2">
+              {isFound.foundAt !== -1
+                ? `${target} found at index: ${isFound.foundAt}`
+                : `${target} not found`}
+            </div>
+          )}
+        </Row>
+        <Row className="d-flex justify-content-center mt-4">
+          {array.map((element, index) => (
+            <Col md={1} key={index}>
+              <Element
+                {...{
+                  array,
+                  element,
+                  target,
+                  search,
+                  isFound,
+                  setIsFound,
+                  index,
+                  setSearch,
+                  searchStates,
+                }}
+              />
+            </Col>
+          ))}
         </Row>
       </Container>
     </div>
