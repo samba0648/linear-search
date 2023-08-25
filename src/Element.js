@@ -52,15 +52,17 @@ const Element = ({
       ? "fade-in-danger"
       : "";
 
+  const getCardStyle = () => {
+    if ([searchStates.IN_PROGRESS, searchStates.FINISHED].includes(search)) {
+      return {
+        animationDelay: `${index * 1}s`,
+      };
+    }
+    return {};
+  };
+
   return (
-    <div
-      className={`card mt-2 ${highlightClass}`}
-      style={
-        search === searchStates.IN_PROGRESS || search === searchStates.FINISHED
-          ? { animationDelay: `${index * 1}s` }
-          : {}
-      }
-    >
+    <div className={`card mt-2 ${highlightClass}`} style={getCardStyle()}>
       <div className="card-body">{element.value}</div>
     </div>
   );
