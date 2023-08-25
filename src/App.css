@@ -4,3 +4,34 @@
   min-height: 100vh;
   color: white;
 }
+
+.fade-in-success {
+  animation: successFadeAnimation 1s forwards alternate ;
+}
+.fade-in-danger {
+  animation: dangerFadeAnimation 1s forwards alternate ;
+}
+
+@keyframes successFadeAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.8); /* Initial zoomed out */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); /* Final normal size */
+    background-color: green;
+  }
+}
+
+@keyframes dangerFadeAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.8); /* Initial zoomed out */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1); /* Final normal size */
+    background-color: red;
+  }
+}

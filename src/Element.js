@@ -44,16 +44,23 @@ const Element = ({
     [searchStates.IN_PROGRESS, searchStates.FINISHED].includes(search) &&
     index <= isFound.foundAt &&
     element.value === target
-      ? "bg-success"
+      ? "fade-in-success"
       : [searchStates.IN_PROGRESS, searchStates.FINISHED].includes(search) &&
         index <= isFound.foundAt
-      ? "bg-danger"
+      ? "fade-in-danger"
       : search === searchStates.FINISHED && !isFound.found
-      ? "bg-danger"
+      ? "fade-in-danger"
       : "";
 
   return (
-    <div className={`card mt-2 ${highlightClass}`}>
+    <div
+      className={`card mt-2 ${highlightClass}`}
+      style={
+        search === searchStates.IN_PROGRESS || search === searchStates.FINISHED
+          ? { animationDelay: `${index * 1}s` }
+          : {}
+      }
+    >
       <div className="card-body">{element.value}</div>
     </div>
   );

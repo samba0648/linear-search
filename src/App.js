@@ -1,6 +1,6 @@
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import "./App.css";
 import Element from "./Element";
@@ -16,6 +16,7 @@ const App = () => {
   const [target, setTarget] = useState("");
   const [search, setSearch] = useState(searchStates.NOT_STARTED);
   const [isFound, setIsFound] = useState({ found: false, foundAt: -1 });
+  const [resultMessage, setResultMessage] = useState("");
 
   const arrayUpdate = (event) => {
     const inputArr = event.target.value
@@ -34,6 +35,7 @@ const App = () => {
     setTarget(temp.trim());
     setSearch(searchStates.NOT_STARTED);
     setIsFound({ found: false, foundAt: -1 });
+    setResultMessage("");
   };
 
   const startSearch = () => {
@@ -41,6 +43,19 @@ const App = () => {
       setSearch(searchStates.IN_PROGRESS);
     }
   };
+
+  useEffect(() => {
+   
+    if (search === searchStates.FINISHED) {
+      const timeSlab = isFound.foundAt === -1 ? (array.length)*1000 : (isFound.foundAt)*1000;
+      setTimeout(() => {
+        setResultMessage(isFound.foundAt !== -1
+          ? `${target} found at index: ${isFound.foundAt}`
+          : `${target} not found`);
+ 
+      },timeSlab); // 1000 milliseconds = 1 second
+    }
+  }, [search, isFound, target,array]);
 
   return (
     <div className="App">
@@ -75,13 +90,7 @@ const App = () => {
           </Col>
         </Row>
         <Row className="d-flex justify-content-center">
-          {search === searchStates.FINISHED && (
-            <div className="mt-2">
-              {isFound.foundAt !== -1
-                ? `${target} found at index: ${isFound.foundAt}`
-                : `${target} not found`}
-            </div>
-          )}
+          {resultMessage}
         </Row>
         <Row className="d-flex justify-content-center mt-4">
           {array.map((element, index) => (
