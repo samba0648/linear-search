@@ -58,8 +58,9 @@ const App = () => {
   }, [search, isFound, target,array]);
 
   return (
-    <div className="App">
+    <div className="App d-flex justify-content-center align-items-center">
       <Container>
+        <h1 className="mb-4 text-info">Linear Search animation</h1>
         <Row className="d-flex justify-content-center">
           <Col md={6} className="mt-2">
             <Form.Group className="mb-3">
@@ -90,7 +91,7 @@ const App = () => {
           </Col>
         </Row>
         <Row className="d-flex justify-content-center">
-          {resultMessage}
+          <p className="text-info mt-4">{resultMessage}</p>
         </Row>
         <Row className="d-flex justify-content-center mt-4">
           {array.map((element, index) => (

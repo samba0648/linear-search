@@ -3,6 +3,7 @@
   background-color: #282c34;
   min-height: 100vh;
   color: white;
+  padding-top: 30px;
 }
 
 .fade-in-success {
@@ -20,7 +21,7 @@
   100% {
     opacity: 1;
     transform: scale(1); /* Final normal size */
-    background-color: green;
+    background-color: rgb(46, 175, 46);
   }
 }
 
@@ -32,6 +33,6 @@
   100% {
     opacity: 1;
     transform: scale(1); /* Final normal size */
-    background-color: red;
+    background-color: rgb(228, 44, 44);
   }
 }
